@@ -190,6 +190,16 @@ body {
   
 
     <script>
+
+function assert(condition) {
+    if (!condition) {
+        var message = "Assertion failed";
+        if (typeof Error !== "undefined") {
+            throw new Error(message);
+        }
+        throw message; // Fallback
+    }
+}
 	
 
 ! function() {
@@ -425,11 +435,12 @@ body {
 			cel[this.y][this.x].po = 0;
 			lx[0] = this.x;
 			ly[0] = this.y;
-			var m = 1;
+			var len = 1;
 			var n = 999;
+			//find min distance to escape
 			for (var po = 1; po < 200; po++) {
 				var p = 0;
-				for (var i = 0; i < m; ++i) {
+				for (var i = 0; i < len; ++i) {
 					var x = lx[i];
 					var y = ly[i];
 					for (var k = 0; k < 6; ++k) {
@@ -449,8 +460,9 @@ body {
 					lx[i] = lx2[i];
 					ly[i] = ly2[i];
 				}
-				m = p;
+				len = p;
 			}
+			//choose a destination
 			if (n == 999) return false;
 			p = 0;
 			for (var i = 0; i < 15; ++i) {
@@ -462,10 +474,11 @@ body {
 					}
 				}
 			}
-			if (p == 0) return false;
+			assert (p != 0);
 			var d = Math.floor(Math.random() * p);
 			x = lx[d];
 			y = ly[d];
+			//find a path to destination
 			for (var r = 0; r < 200; ++r) {
 				p = 0;
 				for (var k = 0; k < 6; ++k) {
@@ -478,7 +491,7 @@ body {
 					ld[p] = k;
 					p++;
 				}
-				if (p == 0) return false;
+				assert (p != 0);// return false;//should not happen
 				d = Math.floor(Math.random() * p);
 				x = lx[d];
 				y = ly[d];
@@ -496,7 +509,8 @@ body {
 					return true;
 				}
 			}
-			return false;
+			assert(false);
+			return false;//should not happen
 		},
 		// random move
 		randMove: function () {
