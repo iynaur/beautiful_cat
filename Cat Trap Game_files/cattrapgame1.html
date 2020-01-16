@@ -698,14 +698,23 @@
 					}
 				},
 				jumpback: function (dir) {
-					dir = (dir + 3)%6;
+					win = false;
+					var ndir = (dir + 3)%6;
+					var x = this.x;
+					var y = this.y;
+					var k = ndir;
+						var kx = y % 2 ? (x + addx1[k]) : (x + addx0[k]);
+						var ky = y + addy0[k];
+						assert (cel[ky][kx].stat == 1);
+						this.x = kx;
+						this.y = ky;
 					for (var i = 1; i < 6; i++) {
 						var frame = 1;
 						setTimeout(function () {
-							var id = "f" + dir + (frame++) % 5;
+							var id = "f" + ndir + (frame++) % 5;
 							if (frame == 6) {
-								this.px += 34 * this.dirX[dir];
-								this.py += 26 * this.dirY[dir];
+								this.px += 34 * this.dirX[ndir];
+								this.py += 26 * this.dirY[ndir];
 								enabled = true;
 							}
 							this.display(this.px, this.py, id);
