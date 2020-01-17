@@ -74,6 +74,11 @@
 			left: 200px;
 		}
 
+		#double {
+			position: absolute;
+			left: 400px;
+		}
+
 		#title {
 			position: absolute;
 			right: 10px;
@@ -476,6 +481,7 @@
 	<div id="bar">
 		<div id="reset">Reset</div>
 		<div id="back">Back</div>
+		<div id="double">Double</div>
 		<div id="title">Cat Trap</div>
 	</div>
 
@@ -495,6 +501,8 @@
 
 		var g_catlist = [];
 		var g_bricklist = [];
+		var g_brickcnt = 1;
+		var g_curcnt = 0;
 
 
 		! function () {
@@ -507,6 +515,7 @@
 			var game = document.getElementById("game");
 			var resetB = document.getElementById("reset");
 			var backB = document.getElementById("back");
+			var doubleB = document.getElementById("double");
 			resetB.onclick = resetB.ontouchstart = function (e) {
 				e.preventDefault();
 				if (enabled) {
@@ -515,12 +524,17 @@
 				}
 				return false;
 			}
-			backB.onclick = resetB.ontouchstart = function (e) {
+			backB.onclick = backB.ontouchstart = function (e) {
 				e.preventDefault();
 				console.log("back");
 				if (g_bricklist.length == 0) return;
 				unclick();
 				cat.jumpback(g_catlist.pop());
+			}
+			doubleB.onclick = doubleB.ontouchstart = function (e) {
+				e.preventDefault();
+				g_brickcnt = 2;//g_brickcnt % 2 + 1;
+
 			}
 			var enabled = true, win = false;
 			var addx0, addy0, addx1, addy1, cel, lx, ly, ld, lmax, lx2, ly2;
@@ -558,14 +572,17 @@
 				if (enabled && cel[y][x].stat != 2) {
 					if (x == cat.x && y == cat.y) return;
 					g_bricklist.push(use);
-					enabled = false;
 					use.setAttributeNS(null, "fill", "#728501");
+					cel[y][x].stat = 2;
+					g_curcnt++;
+					if (g_curcnt < g_brickcnt) return;
+					enabled = false;
+					g_curcnt = 0;
 					if (win) {
 						// run the cat, run!
 						cat.play();
 						cat.run(cat.dir);
 					} else {
-						cel[y][x].stat = 2;
 						cat.play();
 					}
 				}
