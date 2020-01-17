@@ -736,6 +736,7 @@
 							this.py += 0.4 * 26 * this.dirY[dir];
 							this.display(this.px, this.py, id);
 							if (end++ == 18) {
+								alert("小猫咪逃走了，你输了!"); 
 								reset();
 							}
 						}.bind(this), t * 64);
@@ -750,6 +751,7 @@
 							this.x = x;
 							this.y = y;
 							this.dir = i;
+
 							return true;
 						}
 					}
@@ -898,12 +900,14 @@
 					if (!this.goOut()) {
 						if (!this.gotoWin()) {
 							if (!this.getNearest()) {
-								if (!this.randMove()) f = true;
+								// if (!this.randMove()) 
+								f = true;
 							}
 						}
 					}
 					if (f) {
 						// car loose
+						alert("你围住了小猫咪，你赢了!"); 
 						enabled = false;
 						reset();
 					} else {
